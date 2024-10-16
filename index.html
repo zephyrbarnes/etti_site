@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles.css" rel="stylesheet" />
+    <script type="importmap">{
+        "imports": {"cannon": "https://unpkg.com/cannon-es@0.19.0/dist/cannon-es.js",
+        "three": "https://cdn.jsdelivr.net/npm/three@v0.166.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.166.1/examples/jsm/"}}
+    </script>
+    <canvas id="cv"></canvas>
+</head>
+<body>
+    <div id="debug">
+        <small id="timeMetr"></small>
+        <small id="position"></small>
+        <small>Jump: Space, Move: WASD, Debug: P</small><br>
+        <small>Right click Drag Rotate, Scroll to Zoom</small><br>
+        <small>Press enter toggle the scene rendering</small>
+    </div>
+    <script src="engine/inherent.js"></script>
+
+    <div id="tab-view">
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="tab1">
+                    <div class="tab-text">Tab 1</div>
+                </button>
+                <button class="tab" data-tab="tab2">
+                    <div class="tab-text">Tab 2</div>
+                </button>
+                <button class="tab" data-tab="tab3">
+                    <div class="tab-text">Tab 3</div>
+                </button>
+                <button class="exit-button" id="exit-button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="tab-content active" id="tab1">
+                <p>Press the exit button to explore the site further, Still in development, Signed-Zephyr Barnes</p>
+            </div>
+            <div class="tab-content" id="tab2">
+                <p>Content for Tab 2</p>
+            </div>
+            <div class="tab-content" id="tab3">
+                <p>Content for Tab 3</p>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="webPage/tabbing.js"></script>
+</body>
+</html>

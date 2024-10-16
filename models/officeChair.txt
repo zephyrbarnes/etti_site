@@ -1,0 +1,7 @@
+.05 0 -.05 cyl .5 .5 0.9 8 0 0 0 // Base and seat
+
+-.4 0.7 -.05 box .75 0.1 .6 0 0 90 // chair back
+
+0 0.5 .4 box .25 0.1 .6 0 90 90 // right arm
+0 0.5 -.5 box .25 0.1 .6 0 90 90 // lefts arm
+

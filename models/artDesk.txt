@@ -1,0 +1,4 @@
+1 1.2 0 box 1.75 0.1 2.75 0 0 10 // TableTop
+
+1 .5 -1.1 pln 1.75 1 0 0 0 // lefts side
+1 .5 1.1 pln 1.75 1 0 0 0 // lefts side
