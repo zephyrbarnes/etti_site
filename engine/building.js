@@ -1,10 +1,10 @@
-import*as THREE from 'three';
-import*as CANNON from 'cannon'
+import * as CANNON from 'cannon';
+import * as THREE from 'three';
 import Material from './material.js';
 export default class Building{
-    constructor(input, pstn) {
+    constructor(input, position) {
         this.rendered = true; this.assets = [];
-        this.pstn = pstn || new THREE.Vector3(0, 0, 0);
+        this.position = position || new THREE.Vector3(0, 0, 0);
         updates.push(this);
         this.addPreFab(input);
     }
@@ -15,12 +15,19 @@ export default class Building{
 
     addPreFab(input) {
         if(input == 'bedroom') {
-            const roomWalls = new Material(this.pstn, defultMaterial, './models/bedroom', 0x64C84D);
-            const bed = new Material(new THREE.Vector3(-2.1, .75, 2.5).add(this.pstn), bounceMaterial, './models/mattress', 0xf0ead6, 1);
-            const desk = new Material(new THREE.Vector3(2, 0, 2.5).add(this.pstn), defultMaterial, './models/artDesk', 0xFFFFFF, null, null, true);
-            const chair = new Material(new THREE.Vector3(0.5, .5, 2.5).add(this.pstn), slidedMaterial, './models/officeChair', 0x626F78, 2, false, true);
-            const pL = new THREE.PointLight(0xffffff, 50); pL.position.set(0, 4, 0); pL.position.add(this.pstn);
-            pL.castShadow = true; pL.shadow.normalBias = 0.05; scene.add(pL);
+            const roomWalls = new Material(this.position, defaultMaterial, './models/bedroom', 0x64C84D);
+            const bed = new Material(new THREE.Vector3(-2.1, .75, 2.5).add(this.position),
+                                        bounceMaterial, './models/mattress', 0xf0ead6, 1);
+            const chair = new Material(new THREE.Vector3(0.5, .5, 2.5).add(this.position),
+                        slidedMaterial, './models/officeChair', 0x626F78, 2, false, true);
+            const desk = new Material(new THREE.Vector3(2, 0, 2.5).add(this.position),
+                     defaultMaterial, './models/artDesk', 0xFFFFFF, null, null, true);
+            const pL = new THREE.PointLight(0xffffff, 50);
+            pL.position.add(this.position);
+            pL.shadow.normalBias = 0.05;
+            pL.position.set(0, 4, 0);
+            pL.castShadow = true;
+            scene.add(pL);
             
             roomWalls.body.material.type = CANNON.Body.STATIC;
             desk.body.material.type = CANNON.Body.STATIC;
@@ -31,7 +38,7 @@ export default class Building{
     addToSceneAndWorld() {
         this.assets.forEach(asset => {
             if(asset instanceof THREE.Light) scene.add(asset);
-            if(asset.matr) asset.matr.visible = true;
+            if(asset.material) asset.material.visible = true;
             if(asset.body) world.addBody(asset.body);
             if(asset.update) updates.push(asset);
         });
@@ -41,7 +48,7 @@ export default class Building{
         this.assets.forEach(asset => {
             if(asset instanceof THREE.Light) scene.remove(asset);
             if(asset.body) world.removeBody(asset.body);
-            if(asset.matr) asset.matr.visible = false;
+            if(asset.material) asset.material.visible = false;
             if(asset.update) { const index = updates.indexOf(asset);
                 if (index > -1) { updates.splice(index, 1); }
             }

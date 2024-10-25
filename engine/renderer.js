@@ -1,13 +1,16 @@
-import * as THREE from 'three';
 import * as CANNON from 'cannon';
+import * as THREE from 'three';
 export default class Renderer {
     constructor() {
         const sky = 0xADD8E6;
         this.count = this.curr = this.last = this.fps = 0;
-        this.rate = 60; this.time = performance.now();
+        this.rate = 60;
+        this.time = performance.now();
         renderer = new THREE.WebGLRenderer();
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;  renderer.shadowMap.enabled = true;
-        renderer.setClearColor(sky); renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.enabled = true;
+        renderer.setClearColor(sky);
+        renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.domElement.style.display = 'none';
         document.body.appendChild(renderer.domElement);
         
@@ -17,22 +20,26 @@ export default class Renderer {
         Object.assign(camera, { near:.1, far:100, zoom:1, fov:71 });
         camera.updateProjectionMatrix();
         
-        defultMaterial = new CANNON.Material({friction:0});
+        defaultMaterial = new CANNON.Material({friction:0});
         entityMaterial = new CANNON.Material({friction:0});
         bounceMaterial = new CANNON.Material({friction:.5});
         slidedMaterial = new CANNON.Material({friction:.001});
-        const touchsContact = new CANNON.ContactMaterial(defultMaterial, entityMaterial, {restitution:0});
-        const slidesContact = new CANNON.ContactMaterial(defultMaterial, slidedMaterial, {restitution:0});
+        const touchsContact = new CANNON.ContactMaterial(defaultMaterial, entityMaterial, {restitution:0});
+        const slidesContact = new CANNON.ContactMaterial(defaultMaterial, slidedMaterial, {restitution:0});
         const jumpedContact = new CANNON.ContactMaterial(entityMaterial, bounceMaterial, {restitution:1});
-        const bounceContact = new CANNON.ContactMaterial(defultMaterial, bounceMaterial,{restitution:.5});
-        world.addContactMaterial(jumpedContact); world.addContactMaterial(bounceContact);
-        world.addContactMaterial(slidesContact); world.addContactMaterial(touchsContact);
-        const ambientLight = new THREE.AmbientLight(0x303030); scene.add(ambientLight);
+        const bounceContact = new CANNON.ContactMaterial(defaultMaterial, bounceMaterial,{restitution:.5});
+        world.addContactMaterial(jumpedContact);
+        world.addContactMaterial(bounceContact);
+        world.addContactMaterial(slidesContact);
+        world.addContactMaterial(touchsContact);
+        const ambientLight = new THREE.AmbientLight(0x303030);
+        scene.add(ambientLight);
     }
 
     render() {
+        this.count++;
         this.curr = performance.now();
-        world.step(1/this.rate); this.count++;
+        world.step(1/this.rate);
         if(this.curr - this.last > 1000 / this.rate) {
             updates.forEach(u=> u.update());
             renderer.render( scene, camera);

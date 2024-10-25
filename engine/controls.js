@@ -1,9 +1,9 @@
-import*as THREE from 'three';
+import * as THREE from 'three';
 const PI4 = Math.PI / 4, PI8 = Math.PI / 8, PI180 = Math.PI / 180;
 
 export default class Controls {
-    key = {38:'mF',87:'mF'/*w||forw*/, 37:'mL',65:'mL'/*a||left*/, 40:'mB',83:'mB'/*s||back*/,
-           39:'mR',68:'mR'/*d||rght*/, 32:'mJ'/*space*/, 16:'shift'/*shift*/,
+    key = {38:'mF',87:'mF'/*w||forw*/, 37:'mL',65:'mL'/*a||left*/, 40:'mB',83:'mB'/*s||back*/, 39:'mR',68:'mR'/*d||rght*/,
+           32:'mJ'/*space*/, 16:'shift'/*shift*/,
     };
     constructor(entity) {
         Object.assign(this, {
