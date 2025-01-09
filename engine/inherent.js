@@ -2,6 +2,10 @@ const cv = document.getElementById('cv');
 const ct = cv.getContext("2d");
 const ch = cv.height = 176;
 const cw = cv.width = 220;
+const PI180 = Math.PI / 180;
+const PI = Math.PI;
+const PI4 = PI / 4;
+const PI8 = PI / 8;
 let rendering = true;
 let webToggle = true;
 let defaultMaterial;
@@ -20,7 +24,6 @@ let player;
 let tickID;
 let scene;
 let world;
-const dg = Math.PI / 180;
 const updates = [];
 
 const tFx = (v, n) => {return v.toFixed(n)};

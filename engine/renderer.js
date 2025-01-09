@@ -7,12 +7,11 @@ export default class Renderer {
         this.rate = 60;
         this.time = performance.now();
         renderer = new THREE.WebGLRenderer();
+        renderer.domElement.style.display = 'none';
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.setClearColor(sky);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.domElement.style.display = 'none';
-        document.body.appendChild(renderer.domElement);
         
         world = new CANNON.World({ gravity: new CANNON.Vec3( 0, -10, 0) });
         scene = new THREE.Scene(); scene.fog = new THREE.Fog(sky, 10, 100);
@@ -20,22 +19,27 @@ export default class Renderer {
         Object.assign(camera, { near:.1, far:100, zoom:1, fov:71 });
         camera.updateProjectionMatrix();
         
-        defaultMaterial = new CANNON.Material({friction:0});
         entityMaterial = new CANNON.Material({friction:0});
         bounceMaterial = new CANNON.Material({friction:.5});
+        defaultMaterial = new CANNON.Material({friction:0});
         slidedMaterial = new CANNON.Material({friction:.001});
         const touchsContact = new CANNON.ContactMaterial(defaultMaterial, entityMaterial, {restitution:0});
         const slidesContact = new CANNON.ContactMaterial(defaultMaterial, slidedMaterial, {restitution:0});
-        const jumpedContact = new CANNON.ContactMaterial(entityMaterial, bounceMaterial, {restitution:1});
         const bounceContact = new CANNON.ContactMaterial(defaultMaterial, bounceMaterial,{restitution:.5});
+        const jumpedContact = new CANNON.ContactMaterial(entityMaterial,  bounceMaterial, {restitution:1});
         world.addContactMaterial(jumpedContact);
         world.addContactMaterial(bounceContact);
         world.addContactMaterial(slidesContact);
         world.addContactMaterial(touchsContact);
         const ambientLight = new THREE.AmbientLight(0x303030);
+
+        document.body.appendChild(renderer.domElement);
         scene.add(ambientLight);
     }
 
+    /**
+     * Increments world and frames at their own rates
+     */
     render() {
         this.count++;
         this.curr = performance.now();
@@ -52,6 +56,11 @@ export default class Renderer {
         this.display(this.fps);
     }
 
+    /**
+     * Updates display with frames per second (fps) and player position
+     * 
+     * @param {*} fps 
+     */
     display(fps) {
         const p = player.mesh.position;
         document.getElementById('timeMetr').textContent = `FPS: ${tFx((fps-1),0)}`;

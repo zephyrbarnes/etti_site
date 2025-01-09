@@ -15,11 +15,11 @@ const groundBody = new CANNON.Body({ shape: new CANNON.Plane(),
 scene.add(groundMesh); world.addBody(groundBody);
 groundMesh.receiveShadow = true;
 groundMesh.position.y = -.01; groundBody.position.y = .1;
-groundBody.quaternion.setFromEuler( - Math.PI / 2, 0, 0);
+groundBody.quaternion.setFromEuler( - PI / 2, 0, 0);
 groundMesh.quaternion.copy(groundBody.quaternion);
 
 building = new Building('bedroom');
-player = new Entities('./user/topDwn', new CANNON.Vec3(1.5, 0, 2.5));
+player = new Entities('./assets/user/topDwn', new CANNON.Vec3(1.5, 0, 2.5));
 control = new Controls(player);
 
 export default function animate() { render.render();

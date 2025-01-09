@@ -2,24 +2,32 @@ import * as CANNON from 'cannon';
 import * as THREE from 'three';
 const above = new CANNON.Vec3(0, 1, 0);
 export default class Entity {
-    vlc = new THREE.Vector3();
-    radius = 0.375;
-    sprite = [];
-    temp = new Image();
-    tmp2 = new Image();
+    temp = new Image(); tmp2 = new Image();
     color = this.rgbToHex(190, 173, 209);
+    previous = 4; frame = 4; faced = 0;
+    vlc = new THREE.Vector3();
+    ground = false;
+    sprite = [];
+    angle = 0;
+    jump = 1;
+    num = 0;
+    mesh = new THREE.Group();
     constructor(path, position, size, speed) {
         position.y += 1;
-        this.path = path;
-        Object.assign(this, { size: size || 22, speed: speed || 8, angle:0,
-            num: 0, frame: 4,faced: 0, prev: 4, jump: 1, ground: false,
+        Object.assign(this, {
+            size: size || 22,
+            speed: speed || 8,
+            jumpSpeed: speed / 1.5 || 8 / 1.5,
+            body: new CANNON.Body({
+                material: entityMaterial,
+                fixedRotation: true,
+                position: position,
+                mass: 1 }),
+            path: path,
         });
-        this.jumpSpeed = this.speed / 1.5;
-        this.mesh = new THREE.Group();
-        this.body = new CANNON.Body({mass:1, position: position, fixedRotation:true, material:entityMaterial});
-        this.addToBody(0,   0, 0, 'cyl', this.radius + .01, this.radius + .01, 1.2, 8);
-        this.addToBody(0,-.53, 0, 'sph', this.radius, Math.PI, Math.PI / 2);
-        this.addToBody(0, .53, 0, 'sph', this.radius, 0, Math.PI / 2);
+        this.addToBody(0,   0, 0, 'cyl', 0.385, 0.385, 1.2, 8);
+        this.addToBody(0,-.53, 0, 'sph', 0.375, PI, PI / 2);
+        this.addToBody(0, .53, 0, 'sph', 0.375, 0, PI / 2);
         world.addBody(this.body);
         scene.add(this.mesh);
         updates.push(this);
@@ -57,7 +65,10 @@ export default class Entity {
 
                 map.magFilter = THREE.NearestFilter;
                 const sprite = new THREE.Sprite(new THREE.MeshBasicMaterial({
-                    map:map, transparent:true, visible:true, color:this.color
+                    transparent:true,
+                    color:this.color,
+                    visible:true,
+                    map:map,
                 }));
                 sprite.scale.set(2*.9, 2);
                 this.sprite.push(sprite); scene.add(sprite);
@@ -95,25 +106,28 @@ export default class Entity {
         this.body.velocity.set(this.vlc.x, this.body.velocity.y, this.vlc.z);
     }
     
-    collision() { let angle = null;
-        const n = new CANNON.Vec3(), b = this.body, v = this.vlc;
-        world.contacts.forEach(c => {
-            if(c.bi == b || c.bj == b) {
-                const contactBody = c.bi == b ? c.bj : c.bi;
-                c.bi == b ? c.ni.negate(n): n.copy(c.ni);
+    collision() {
+        let angle = null;
+        const n = new CANNON.Vec3();
+        const body = this.body;
+        const v = this.vlc;
+        world.contacts.forEach(contact => {
+            if(contact.bi == body || contact.bj == body) {
+                const contactBody = contact.bi == body ? contact.bj : contact.bi;
+                contact.bi == body ? contact.ni.negate(n): n.copy(contact.ni);
 
                 if(Math.abs(n.x) < 1e-4) n.x = 0;
                 if(Math.abs(n.z) < 1e-4) n.z = 0;
 
                 angle = n.dot(above);
 
-                if(angle <= 0.7) b.material = slidedMaterial;
+                if(angle <= 0.7) body.material = slidedMaterial;
                 if(angle != 0 && angle <= 0.7) {
                     if(v.x * n.x < 0) v.x = 0;
                     if(v.z * n.z < 0) v.z = 0;
                     this.ground = true;
                 }else if(angle > 0.7) {
-                    b.material = entityMaterial;
+                    body.material = entityMaterial;
                     this.ground = true;
                     this.jump = 1;
                 }
@@ -123,20 +137,25 @@ export default class Entity {
                 }else this.jumpSpeed = this.speed / 1.5;
             }
         });
-        if(this.ground && angle <= 0.7 && angle != 0 && b.velocity.y > 0) b.velocity.y = 0;
+        if(this.ground && angle <= 0.7 && angle != 0 && body.velocity.y > 0) body.velocity.y = 0;
     }
 
     reface() {
-        if(facing != 0) { this.num += 5;
-            if (this.num > 35) { this.num = 0; this.frame = (this.frame + 1) % 8; }
+        if(facing !== 0) { this.num += 5;
+            if (this.num > 35) { this.num = 0;
+                this.frame = (this.frame + 1) % 8;
+            }
             this.faced = facing % 9;
-            this.prev = (this.faced + 9) % 9;
-        }else{ this.frame = this.prev; this.faced = 0; }
-        this.mesh.children.forEach(c => { c.material.visible = debug });
+            this.previous = (this.faced + 9) % 9;
+        }else{
+            this.frame = this.previous;
+            this.faced = 0;
+        }
+        this.mesh.children.forEach(child => { child.material.visible = debug });
         this.sprite.forEach(sprite => {
             this.shiftTile(sprite);
             sprite.material.visible = !debug;
-            sprite.rotation.set(0, control.ang, 0);
+            sprite.rotation.set(0, control.angle, 0);
             sprite.position.copy(this.mesh.position);
         })
     }
@@ -148,14 +167,26 @@ export default class Entity {
         let face = direction = this.faced;
         let frame = this.frame;
         let mirror = false;
-        const transform = { // Transformations for Facing
-            0: () => { if(frame > 4) { frame = 8 - frame; mirror = true; }},
-            5: () => { direction = 3; frame = (frame + 4) % 8; mirror = true; },
-            6: () => { direction = 2; frame = (frame + 4) % 8; mirror = true; },
-            7: () => { direction = 1; frame = (frame + 4) % 8; mirror = true; },
-            8: () => { direction = 5; if(frame > 3) { frame -= 4; if(frame == 4) frame = 0; mirror = true;}},
-            4: () => { if(frame > 3) { frame -= 4; if(frame == 4) frame = 0; mirror = true;}},
-        }; if(transform[face]) transform[face](); // Apply Transformations
+        const transform = {
+            0: () => { if (frame > 4) { frame = 8 - frame; mirror = true; } },
+            5: () => { direction = 3; },
+            6: () => { direction = 2; },
+            7: () => { direction = 1; },
+            8: () => { direction = 5; }
+        };
+        
+        if ([8, 4].includes(face) && frame > 3) {
+            frame -= 4;
+            if (frame === 4) frame = 0;
+            mirror = true;
+        }
+        
+        if ([5, 6, 7].includes(face)) {
+            frame = (frame + 4) % 8;
+            mirror = true;
+        }
+        
+        if (transform[face]) transform[face]();
 
         let crop = direction * horizontal + frame;
         let xPosition = (crop % horizontal) / horizontal;

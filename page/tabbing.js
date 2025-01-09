@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tabs.forEach(t => t.classList.remove('active')); // Remove active tab
             cont.forEach(c => c.classList.remove('active')); // Remove active content
             tab.classList.add('active'); // Add active tab
-            document.getElementById(tab.dataset.tab).classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active'); // Add content
         });
     });
 
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         bgnAnimation();
     });
 
-    function bgnAnimation() { if(!tickID) { tickID = requestAnimationFrame(animate)}}
-    function endAnimation() { if(tickID) { cancelAnimationFrame(tickID); tickID = null}}
+    function bgnAnimation() { if(!tickID) { tickID = requestAnimationFrame(animate) }} // Starts animation
+    function endAnimation() { if(tickID) { cancelAnimationFrame(tickID); tickID = null }} // End animation
 
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && !webToggle) {

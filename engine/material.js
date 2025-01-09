@@ -46,6 +46,7 @@ export default class material {
     addToBody(x, y, z, tp, a, b, c, d, e, f, g) {
         let body = null;
         let mesh = null;
+        const dg = PI180;
         const position = new CANNON.Vec3(x, y, z);
         const quaternion = new CANNON.Quaternion();
         switch(tp) {
@@ -75,7 +76,7 @@ export default class material {
                     shaped.absarc(-a,-c, rd, 3.2, 4.7);
                     shaped.absarc( a,-c, rd, 4.7, 6.3);
                     let shape = new THREE.ExtrudeGeometry(shaped, settings);
-                    shape.rotateX(Math.PI/2);
+                    shape.rotateX(PI/2);
                     mesh = new THREE.Mesh(shape, this.material);
                     mesh.position.set( x, y - g, z);
                 } else { mesh = new THREE.Mesh(new THREE.BoxGeometry( a, b, c), this.material) }

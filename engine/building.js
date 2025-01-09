@@ -15,13 +15,13 @@ export default class Building{
 
     addPreFab(input) {
         if(input == 'bedroom') {
-            const roomWalls = new Material(this.position, defaultMaterial, './models/bedroom', 0x64C84D);
+            const roomWalls = new Material(this.position, defaultMaterial, './assets/models/bedroom', 0x64C84D);
             const bed = new Material(new THREE.Vector3(-2.1, .75, 2.5).add(this.position),
-                                        bounceMaterial, './models/mattress', 0xf0ead6, 1);
+                                        bounceMaterial, './assets/models/mattress', 0xf0ead6, 1);
             const chair = new Material(new THREE.Vector3(0.5, .5, 2.5).add(this.position),
-                        slidedMaterial, './models/officeChair', 0x626F78, 2, false, true);
+                        slidedMaterial, './assets/models/officeChair', 0x626F78, 2, false, true);
             const desk = new Material(new THREE.Vector3(2, 0, 2.5).add(this.position),
-                     defaultMaterial, './models/artDesk', 0xFFFFFF, null, null, true);
+                     defaultMaterial, './assets/models/artDesk', 0xFFFFFF, null, null, true);
             const pL = new THREE.PointLight(0xffffff, 50);
             pL.position.add(this.position);
             pL.shadow.normalBias = 0.05;
