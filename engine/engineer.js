@@ -7,19 +7,24 @@ import Entities from './entities.js';
 
 const render = new Renderer();
 
-const groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(500, 500),
-    new THREE.MeshPhongMaterial({color: 0xFFFFFF, side: THREE.DoubleSide}));
-const groundBody = new CANNON.Body({ shape: new CANNON.Plane(),
-    type: CANNON.Body.STATIC, material: new CANNON.Material({friction:0.1})
+const groundMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(500, 500),
+    new THREE.MeshPhongMaterial({color: 0xFFFFFF, side: THREE.DoubleSide})
+);
+const groundBody = new CANNON.Body({
+    type: CANNON.Body.STATIC,
+    shape: new CANNON.Plane(),
+    material: new CANNON.Material({friction:0.1})
 });
-scene.add(groundMesh); world.addBody(groundBody);
-groundMesh.receiveShadow = true;
 groundMesh.position.y = -.01; groundBody.position.y = .1;
 groundBody.quaternion.setFromEuler( - PI / 2, 0, 0);
 groundMesh.quaternion.copy(groundBody.quaternion);
+groundMesh.receiveShadow = true;
+world.addBody(groundBody);
+scene.add(groundMesh);
 
-building = new Building('bedroom');
 player = new Entities('./assets/user/topDwn', new CANNON.Vec3(1.5, 0, 2.5));
+building = new Building('bedroom');
 control = new Controls(player);
 
 export default function animate() { render.render();
@@ -27,7 +32,7 @@ export default function animate() { render.render();
 }
 
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
     renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 }, false);

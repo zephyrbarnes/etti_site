@@ -17,7 +17,7 @@ export default class Controls {
             angle: 270*PI180,
             ang45: 60*PI180,
             entity: entity,
-            distance: 15,
+            distance: 14,
             sector: 0,
         });
         [
@@ -44,11 +44,6 @@ export default class Controls {
 
     onMouse(e) {
         if(webToggle) return;
-        const adjustCamera = (a, b, c, d, e, f, g) => {
-            Object.assign(camera, { zoom: c, fov: d, near: e, far: f });
-            Object.assign(this, { adjust: a, distance: b });
-            scene.fog = g;
-        };
 
         const indx = (X, Y) => {
             const a = Math.atan2(Y - window.innerHeight / 2, X - window.innerWidth / 2);
@@ -68,13 +63,29 @@ export default class Controls {
             }
         }else if(e.type == 'wheel') { 
             const delta = e.deltaY*0.01;
-            if (camera.fov >= 71) {
-                camera.fov = Math.min(120, Math.max(1, camera.fov + delta));
-                if(camera.fov <= 70) adjustCamera(this.plumbAngle, 5000, 4.3, 1, 4500, 5500, null);
-            }else
-            if (camera.fov <= 45) {
-                camera.zoom = Math.min(20, camera.zoom - delta*0.05);
-                if(camera.zoom < 4.3) adjustCamera(this.ang45, 15, 1, 71, .1, 100, null);
+            if (camera instanceof THREE.PerspectiveCamera) {
+                if (camera.fov >= 71) {
+                    camera.fov = Math.min(120, Math.max(1, camera.fov + delta));
+                    if (camera.fov < 71) {
+                        camera = ortho;
+                        this.distance = 45;
+                        camera.zoom = 2.5;
+                        scene.fog.near = 30;
+                        scene.fog.far = 100;
+                    }
+                }
+            }
+            if (camera instanceof THREE.OrthographicCamera) {
+                if (camera.zoom >= 2.5) {
+                    camera.zoom = Math.min(5, Math.max(1, camera.zoom - delta * 0.05));
+                    if (camera.zoom < 2.5) {
+                        camera = persp;
+                        this.distance = 14;
+                        camera.fov = 71;
+                        scene.fog.near = 5;
+                        scene.fog.far = 50;
+                    }
+                }
             }
             camera.updateProjectionMatrix();
         }

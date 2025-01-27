@@ -8,18 +8,9 @@
         "three": "https://cdn.jsdelivr.net/npm/three@v0.166.1/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.166.1/examples/jsm/"}}
     </script>
-    <canvas id="cv"></canvas>
 </head>
 <body>
-    <div id="debug">
-        <small id="timeMetr"></small>
-        <small id="position"></small>
-        <small>Jump: Space, Move: WASD, Debug: P</small><br>
-        <small>Right click Drag Rotate, Scroll to Zoom</small><br>
-        <small>Press enter toggle the scene rendering</small>
-    </div>
-    <script src="engine/inherent.js"></script>
-
+    
     <div id="tab-view">
         <div class="tab-container">
             <div class="tabs">
@@ -27,26 +18,33 @@
                     <div class="tab-text">Tab 1</div>
                 </button>
                 <button class="tab" data-tab="tab2">
-                    <div class="tab-text">Tab 2</div>
+                    <div class="tab-text">Game Engine</div>
                 </button>
                 <button class="tab" data-tab="tab3">
                     <div class="tab-text">Tab 3</div>
                 </button>
-                <button class="exit-button" id="exit-button">
-                    <i class="fas fa-times"></i>
-                </button>
             </div>
             <div class="tab-content active" id="tab1">
-                <p>Press the exit button to explore the site further, Still in development, Signed-Zephyr Barnes</p>
+                <p>Check out the tabs to explore the site further, Still in development, Signed-Zephyr Barnes</p>
             </div>
             <div class="tab-content" id="tab2">
-                <p>Content for Tab 2</p>
+                <canvas id="cv"></canvas>
+
+                <div id="debug">
+                    <small id="timeMetr"></small>
+                    <small id="position"></small>
+                    <small>Jump: Space, Move: WASD, Debug: P</small><br>
+                    <small>Right click Drag Rotate, Scroll to Zoom</small><br>
+                    <small>Press enter toggle the scene rendering</small>
+                </div>
             </div>
             <div class="tab-content" id="tab3">
                 <p>Content for Tab 3</p>
             </div>
         </div>
     </div>
+
+    <script src="engine/inherent.js"></script>
     <script type="module" src="page/tabbing.js"></script>
 </body>
 </html>

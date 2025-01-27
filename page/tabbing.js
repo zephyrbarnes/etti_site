@@ -1,10 +1,8 @@
 import animate from '../engine/engineer.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    const exitButton = document.getElementById('exit-button');
     const cont = document.querySelectorAll('.tab-content');
     const engineDebug = document.getElementById('debug');
-    const tabView = document.getElementById('tab-view');
     const tabs = document.querySelectorAll('.tab');
     const renderElement = renderer.domElement;
 
@@ -13,30 +11,19 @@ document.addEventListener('DOMContentLoaded', function() {
             cont.forEach(c => c.classList.remove('active')); // Remove active content
             tab.classList.add('active'); // Add active tab
             document.getElementById(tab.dataset.tab).classList.add('active'); // Add content
-        });
-    });
 
-    exitButton.addEventListener('click', function() {
-        webToggle = !webToggle;
-        tabView.style.display = 'none';
-        engineDebug.style.display = renderElement.style.display = 'block';
-        bgnAnimation();
+            if (tab.dataset.tab !== 'tab2' && !webToggle) {
+                engineDebug.style.display = renderElement.style.display = 'none';
+                webToggle = !webToggle;
+                endAnimation();
+            } else if (tab.dataset.tab === 'tab2' && webToggle) {
+                engineDebug.style.display = renderElement.style.display = 'block';
+                webToggle = !webToggle;
+                bgnAnimation();
+            }
+        });
     });
 
     function bgnAnimation() { if(!tickID) { tickID = requestAnimationFrame(animate) }} // Starts animation
     function endAnimation() { if(tickID) { cancelAnimationFrame(tickID); tickID = null }} // End animation
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && !webToggle) {
-            webToggle = !webToggle;
-            tabView.style.display = 'block';
-            engineDebug.style.display = renderElement.style.display = 'none';
-            endAnimation();
-        }else if (event.key === 'Escape' && webToggle) {
-            webToggle = !webToggle;
-            tabView.style.display = 'none';
-            engineDebug.style.display = renderElement.style.display = 'block';
-            bgnAnimation();
-        }
-    });
 });

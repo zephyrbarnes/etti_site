@@ -13,10 +13,13 @@ export default class Renderer {
         renderer.shadowMap.enabled = true;
         renderer.setClearColor(sky);
         
+        let r = window.innerWidth / window.innerHeight, f = 50 / 2;
         world = new CANNON.World({ gravity: new CANNON.Vec3( 0, -10, 0) });
-        scene = new THREE.Scene(); scene.fog = new THREE.Fog(sky, 10, 100);
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight);
-        Object.assign(camera, { near:.1, far:100, zoom:1, fov:71 });
+        scene = new THREE.Scene();
+        persp = new THREE.PerspectiveCamera(71, r, .1, 100);
+        ortho = new THREE.OrthographicCamera( -r * f, r * f, f, -f, 0.1, 100 );
+        camera = persp;
+        scene.fog = new THREE.Fog(sky, 5, 50);
         camera.updateProjectionMatrix();
         
         entityMaterial = new CANNON.Material({friction:0});

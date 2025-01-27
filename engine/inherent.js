@@ -22,6 +22,8 @@ let camera;
 let aspect;
 let player;
 let tickID;
+let persp;
+let ortho;
 let scene;
 let world;
 const updates = [];

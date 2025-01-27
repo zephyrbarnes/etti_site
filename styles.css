@@ -5,16 +5,15 @@ body {
     -moz-user-select:none; -ms-user-select: none;
     overflow: hidden; display: flex; margin: 0;
 }
-#cv{ display:none }
 #timeMetr, #debug, #position {
     background: rgba(0, 0, 0, 0.5);
     font-family: Arial, sans-serif;
     padding: 5px; color: #fff;
 }
 
-#position { position: absolute; margin: -40px 0 0 100px; }
-#timeMetr { position: absolute; margin: -40px 0 0 -5px; }
-#debug { display: none; position: absolute; top: 40px; left: 5px; }
+#position { position: absolute; margin: -30px 0 0 100px; }
+#timeMetr { position: absolute; margin: -30px 0 0 -5px; }
+#debug { display: none; position: absolute; top: 55px; left: 5px; }
 
 .tab.active {
     border-bottom: 3px solid #fff;
@@ -31,6 +30,7 @@ body {
 }
 
 #tab-view, .tab-container {
+    position: absolute;
     display: block; width: 100%; height: 100%;
     align-items: center; justify-content: center;
 }
@@ -47,13 +47,3 @@ body {
     margin-right: 0px;
     background-color: #ccc;
 }.tab-text { transform: rotateX(180deg); }
-
-.exit-button {
-    color: white;
-    cursor: pointer;
-    padding: 3px 6px;
-    border-radius: 7px 0px 7px 7px;
-    position: absolute;
-    top: 0px; right: 0px;
-    background-color: red;
-}
