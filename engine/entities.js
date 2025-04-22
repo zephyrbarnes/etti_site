@@ -6,6 +6,7 @@ export default class Entity {
     color = this.rgbToHex(190, 173, 209);
     previous = 4; frame = 4; faced = 0;
     vlc = new THREE.Vector3();
+    display = true;
     ground = false;
     sprite = [];
     angle = 0;
@@ -91,6 +92,23 @@ export default class Entity {
 
     move() {
         this.vlc.set(0,0,0);
+
+        if (debug && camera === first) {
+            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).normalize();
+            const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion).normalize();
+    
+            // Handle movement inputs
+            if (this.mF ^ this.mB) this.vlc[this.mF ? 'add' : 'sub'](forward);
+            if (this.mL ^ this.mR) this.vlc[this.mL ? 'sub' : 'add'](right);
+
+            this.vlc.normalize().multiplyScalar(this.speed);
+
+            this.body.velocity.set(this.vlc.x, this.vlc.y, this.vlc.z);
+            this.body.position.vadd(this.vlc.clone().multiplyScalar(0.1), this.body.position);
+            
+            return;
+        }
+
         const right = new THREE.Vector3(1,0,0).applyQuaternion(camera.quaternion).normalize();
         const forward = new THREE.Vector3(right.z,0,-right.x);
         if(this.mF^this.mB) this.vlc[this.mF ? 'add':'sub'](forward);
@@ -142,7 +160,7 @@ export default class Entity {
 
     reface() {
         if(facing !== 0) { this.num += 5;
-            if (this.num > 35) { this.num = 0;
+            if (this.num > 18) { this.num = 0;
                 this.frame = (this.frame + 1) % 8;
             }
             this.faced = facing % 9;
@@ -151,10 +169,17 @@ export default class Entity {
             this.frame = this.previous;
             this.faced = 0;
         }
-        this.mesh.children.forEach(child => { child.material.visible = debug });
+        this.mesh.children.forEach(child => {
+            if(camera != first) child.material.visible = debug
+        });
         this.sprite.forEach(sprite => {
             this.shiftTile(sprite);
-            sprite.material.visible = !debug;
+            if(this.display) {
+                sprite.material.visible = true;
+                sprite.material.visible = !debug;
+            }else{
+                sprite.material.visible = false;
+            }
             sprite.rotation.set(0, control.angle, 0);
             sprite.position.copy(this.mesh.position);
         })

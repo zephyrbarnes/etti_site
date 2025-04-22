@@ -1,5 +1,5 @@
-const cv = document.getElementById('cv');
-const ct = cv.getContext("2d");
+const cv = document.getElementById('cvEngine');
+const ct = cvEngine.getContext("2d");
 const ch = cv.height = 176;
 const cw = cv.width = 220;
 const PI180 = Math.PI / 180;
@@ -24,6 +24,7 @@ let player;
 let tickID;
 let persp;
 let ortho;
+let first;
 let scene;
 let world;
 const updates = [];

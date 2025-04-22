@@ -16,8 +16,9 @@ export default class Renderer {
         let r = window.innerWidth / window.innerHeight, f = 50 / 2;
         world = new CANNON.World({ gravity: new CANNON.Vec3( 0, -10, 0) });
         scene = new THREE.Scene();
-        persp = new THREE.PerspectiveCamera(71, r, .1, 100);
+        persp = new THREE.PerspectiveCamera(72, r, .1, 100);
         ortho = new THREE.OrthographicCamera( -r * f, r * f, f, -f, 0.1, 100 );
+        first = new THREE.PerspectiveCamera(70, r, .1, 100);
         camera = persp;
         scene.fog = new THREE.Fog(sky, 5, 50);
         camera.updateProjectionMatrix();
@@ -56,17 +57,17 @@ export default class Renderer {
             this.fps = this.count; this.count = 0;
             this.time = this.curr;
         }
-        this.display(this.fps);
+        this.display();
     }
 
     /**
      * Updates display with frames per second (fps) and player position
      * 
-     * @param {*} fps 
      */
-    display(fps) {
+    display() {
         const p = player.mesh.position;
-        document.getElementById('timeMetr').textContent = `FPS: ${tFx((fps-1),0)}`;
+        document.getElementById('timeMetr').textContent = `FPS: ${tFx((this.fps-1),0)}`;
+        // document.getElementById('misc').textContent = `Misc: ${camera.quaternion.x}`;
         document.getElementById('position').textContent = `X: ${ tFx(p.x,1)} Y: ${tFx((p.y-1),1)} Z: ${ tFx(p.z,1)}`;
     }
 }

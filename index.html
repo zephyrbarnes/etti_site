@@ -6,7 +6,8 @@
     <script type="importmap">{
         "imports": {"cannon": "https://unpkg.com/cannon-es@0.19.0/dist/cannon-es.js",
         "three": "https://cdn.jsdelivr.net/npm/three@v0.166.1/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.166.1/examples/jsm/"}}
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.166.1/examples/jsm/"
+        }}
     </script>
 </head>
 <body>
@@ -21,29 +22,32 @@
                     <div class="tab-text">Game Engine</div>
                 </button>
                 <button class="tab" data-tab="tab3">
-                    <div class="tab-text">Tab 3</div>
+                    <div class="tab-text">etiYeti</div>
                 </button>
             </div>
             <div class="tab-content active" id="tab1">
                 <p>Check out the tabs to explore the site further, Still in development, Signed-Zephyr Barnes</p>
+                <!-- <canvas id="etiYeti"></canvas> -->
             </div>
             <div class="tab-content" id="tab2">
-                <canvas id="cv"></canvas>
+                <canvas id="cvEngine"></canvas>
 
                 <div id="debug">
                     <small id="timeMetr"></small>
                     <small id="position"></small>
+                    <small id="misc"></small>
                     <small>Jump: Space, Move: WASD, Debug: P</small><br>
                     <small>Right click Drag Rotate, Scroll to Zoom</small><br>
                     <small>Press enter toggle the scene rendering</small>
                 </div>
             </div>
             <div class="tab-content" id="tab3">
-                <p>Content for Tab 3</p>
+                <!-- <canvas id="etiYeti"></canvas> -->
             </div>
         </div>
     </div>
 
+    <!-- <script src="etiYeti.js"></script> -->
     <script src="engine/inherent.js"></script>
     <script type="module" src="page/tabbing.js"></script>
 </body>
