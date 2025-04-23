@@ -1,6 +1,6 @@
 import * as CANNON from 'cannon';
 import * as THREE from 'three';
-import Material from './material.js';
+import Construct from './construct.js';
 export default class Building{
     constructor(input, position) {
         this.rendered = true; this.assets = [];
@@ -15,12 +15,12 @@ export default class Building{
 
     addPreFab(input) {
         if(input == 'bedroom') {
-            const roomWalls = new Material(this.position, defaultMaterial, './assets/models/bedroom', 0x64C84D);
-            const chair = new Material(new THREE.Vector3(0.5, .5, 2.5).add(this.position),
+            const roomWalls = new Construct(this.position, defaultMaterial, './assets/models/bedroom', 0x64C84D);
+            const chair = new Construct(new THREE.Vector3(0.5, .5, 2.5).add(this.position),
                                         slidedMaterial, './assets/models/officeChair', 0x626F78, 2, false, true);
-            const desk = new Material(new THREE.Vector3(2, 0, 2.5).add(this.position),
+            const desk = new Construct(new THREE.Vector3(2, 0, 2.5).add(this.position),
                                         defaultMaterial, './assets/models/artDesk', 0xFFFFFF, null, null, true);
-            const bed = new Material(new THREE.Vector3(-2.1, .75, 2.5).add(this.position),
+            const bed = new Construct(new THREE.Vector3(-2.1, .75, 2.5).add(this.position),
                                         bounceMaterial, './assets/models/mattress', 0xf0ead6, 1);
             const pL = new THREE.PointLight(0xffffff, 50);
             pL.position.add(this.position);

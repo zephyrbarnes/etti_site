@@ -62,7 +62,6 @@ export default class Renderer {
 
     /**
      * Updates display with frames per second (fps) and player position
-     * 
      */
     display() {
         const p = player.mesh.position;
