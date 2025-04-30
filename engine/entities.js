@@ -9,7 +9,7 @@ export default class Entity {
     display = true;
     ground = false;
     sprite = [];
-    angle = 0;
+    ang = 0;
     jump = 1;
     num = 0;
     mesh = new THREE.Group();
@@ -125,7 +125,7 @@ export default class Entity {
     }
     
     collision() {
-        let angle = null;
+        let ang = null;
         const n = new CANNON.Vec3();
         const body = this.body;
         const v = this.vlc;
@@ -137,33 +137,33 @@ export default class Entity {
                 if(Math.abs(n.x) < 1e-4) n.x = 0;
                 if(Math.abs(n.z) < 1e-4) n.z = 0;
 
-                angle = n.dot(above);
+                ang = n.dot(above);
 
-                if(angle <= 0.7) body.material = slidedMaterial;
-                if(angle != 0 && angle <= 0.7) {
+                if(ang <= 0.7) body.material = slidedMaterial;
+                if(ang != 0 && ang <= 0.7) {
                     if(v.x * n.x < 0) v.x = 0;
                     if(v.z * n.z < 0) v.z = 0;
                     this.ground = true;
-                }else if(angle > 0.7) {
+                }else if(ang > 0.7) {
                     body.material = entityMaterial;
                     this.ground = true;
                     this.jump = 1;
                 }
 
-                if(contactBody.material == bounceMaterial && angle > 0.7) {
+                if(contactBody.material == bounceMaterial && ang > 0.7) {
                     this.jumpSpeed = this.speed / 1.5 * 2;
                 }else this.jumpSpeed = this.speed / 1.5;
             }
         });
-        if(this.ground && angle <= 0.7 && angle != 0 && body.velocity.y > 0) body.velocity.y = 0;
+        if(this.ground && ang <= 0.7 && ang != 0 && body.velocity.y > 0) body.velocity.y = 0;
     }
 
     reface() {
-        if(facing !== 0) { this.num += 5;
+        if(dir !== 0) { this.num += 5;
             if (this.num > 18) { this.num = 0;
                 this.frame = (this.frame + 1) % 8;
             }
-            this.faced = facing % 9;
+            this.faced = dir % 9;
             this.previous = (this.faced + 9) % 9;
         }else{
             this.frame = this.previous;
@@ -180,7 +180,7 @@ export default class Entity {
             }else{
                 sprite.material.visible = false;
             }
-            sprite.rotation.set(0, control.angle, 0);
+            sprite.rotation.set(0, control.ang, 0);
             sprite.position.copy(this.mesh.position);
         })
     }

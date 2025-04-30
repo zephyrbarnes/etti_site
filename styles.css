@@ -54,3 +54,32 @@ body {
     margin-right: 0px;
     background-color: #ccc;
 }.tab-text { transform: rotateX(180deg); }
+
+#button-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10; /* Ensure it appears above the canvas */
+}
+
+.mode-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mode-button:hover {
+    background-color: #666;
+}
+
+.mode-button.active {
+    background-color: #007BFF;
+    color: white;
+}

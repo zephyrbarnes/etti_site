@@ -19,9 +19,8 @@ export default class Renderer {
         persp = new THREE.PerspectiveCamera(72, r, .1, 100);
         ortho = new THREE.OrthographicCamera( -r * f, r * f, f, -f, 0.1, 100 );
         first = new THREE.PerspectiveCamera(70, r, .1, 100);
-        camera = persp;
         scene.fog = new THREE.Fog(sky, 5, 50);
-        camera.updateProjectionMatrix();
+        camera = persp; camera.updateProjectionMatrix();
         
         entityMaterial = new CANNON.Material({friction:0});
         bounceMaterial = new CANNON.Material({friction:.5});
